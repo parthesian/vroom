@@ -1,0 +1,152 @@
+---
+description: 
+globs: 
+---
+# Three.js Project Structure & Best Practices
+
+A comprehensive guide for organizing and optimizing Three.js game development projects.
+
+## 1. Project Architecture
+
+### Core Structure
+- **Rule:** Implement a modular architecture with clear separation of concerns
+  - **Applies to:** Entire project structure
+  - **Description:** Divide functionality into modules (rendering, physics, input, audio, UI, etc.)
+
+### Scene Management
+- **Rule:** Create a SceneManager class to handle scene transitions and state
+  - **Applies to:** `src/core/SceneManager.js`
+  - **Description:** Facilitates multiple scenes/levels with standardized loading/unloading
+
+### Component System
+- **Rule:** Use composition over inheritance with an entity-component architecture
+  - **Applies to:** `src/entities/` and `src/components/`
+  - **Description:** Enables flexible object behavior through component attachment rather than deep inheritance hierarchies
+
+## 2. Rendering & Performance
+
+### Render Loop
+- **Rule:** Implement a time-delta-based game loop with fixed physics updates
+  - **Applies to:** `src/core/Engine.js`
+  - **Description:** Ensures consistent gameplay regardless of framerate, separating physics updates from rendering
+
+### Asset Optimization
+- **Rule:** Implement Level of Detail (LOD) systems for complex models and scenes
+  - **Applies to:** `src/utils/LODManager.js`
+  - **Description:** Dynamically adjusts model complexity based on distance/importance
+
+### Batching & Instancing
+- **Rule:** Use InstancedMesh for rendering numerous similar objects
+  - **Applies to:** `src/rendering/InstanceManager.js`
+  - **Description:** Dramatically reduces draw calls for repeating geometry (particles, vegetation, crowds)
+
+### Shader Management
+- **Rule:** Create a ShaderLib with reusable shader chunks and material presets
+  - **Applies to:** `src/shaders/`
+  - **Description:** Maintains consistency while enabling shader code reuse and optimization
+
+## 3. Asset Pipeline
+
+### Asset Loading
+- **Rule:** Implement a centralized AssetManager with caching and reference counting
+  - **Applies to:** `src/assets/AssetManager.js`
+  - **Description:** Prevents duplicate loading, handles memory management, and provides progress tracking
+
+### Texture Management
+- **Rule:** Optimize textures with proper formats, dimensions as powers of 2, and mipmap settings
+  - **Applies to:** `assets/textures/`
+  - **Description:** Reduces memory usage and improves rendering performance
+
+### Model Processing
+- **Rule:** Establish a standardized model processing pipeline with consistent scaling and orientation
+  - **Applies to:** `src/utils/ModelProcessor.js`
+  - **Description:** Ensures models from different sources work consistently in your engine
+
+## 4. Interaction & Physics
+
+### Input Handling
+- **Rule:** Create an InputManager to abstract input methods (keyboard, mouse, touch, gamepad)
+  - **Applies to:** `src/input/InputManager.js`
+  - **Description:** Allows device-agnostic control schemes and easy remapping
+
+### Collision System
+- **Rule:** Implement a spatial partitioning system (octree/quadtree) for efficient collision detection
+  - **Applies to:** `src/physics/SpatialPartitioning.js`
+  - **Description:** Reduces collision checks by focusing only on nearby objects
+
+### Physics Integration
+- **Rule:** Create a physics abstraction layer to easily switch between physics engines
+  - **Applies to:** `src/physics/PhysicsSystem.js`
+  - **Description:** Decouples game logic from specific physics implementation
+
+## 5. Environment & Effects
+
+### Post-Processing
+- **Rule:** Implement a composable post-processing pipeline with performance toggles
+  - **Applies to:** `src/effects/PostProcessor.js` 
+  - **Description:** Enables combining multiple effects with graceful fallbacks for lower-end devices
+
+### Dynamic Lighting
+- **Rule:** Create a LightManager for optimizing active lights and shadows
+  - **Applies to:** `src/lighting/LightManager.js`
+  - **Description:** Prioritizes important lights and culls those not affecting visible objects
+
+### Environment Setup
+- **Rule:** Establish standardized environment presets (indoor, outdoor, custom) with appropriate lighting
+  - **Applies to:** `src/environments/`
+  - **Description:** Simplifies scene creation with consistent atmospheric settings
+
+## 6. Development Tools
+
+### Debug Tools
+- **Rule:** Create a comprehensive debug overlay with performance metrics and visual helpers
+  - **Applies to:** `src/debug/DebugTools.js`
+  - **Description:** Provides FPS counter, draw call information, physics visualization, and camera controls
+
+### Scene Inspector
+- **Rule:** Implement a runtime scene inspector for object manipulation and property editing
+  - **Applies to:** `src/debug/SceneInspector.js`
+  - **Description:** Allows tweaking object properties and scene parameters during execution
+
+### State Persistence
+- **Rule:** Create a system for saving/loading game state and editor arrangements
+  - **Applies to:** `src/state/StateManager.js`
+  - **Description:** Enables continuing from saved points and preserving editor configurations
+
+## 7. Cross-Platform Considerations
+
+### Responsive Design
+- **Rule:** Implement responsive rendering with dynamic quality settings based on device capabilities
+  - **Applies to:** `src/core/QualityManager.js`
+  - **Description:** Automatically adjusts rendering parameters for optimal performance across devices
+
+### Input Adaptation
+- **Rule:** Support multiple input methods simultaneously with contextual UI
+  - **Applies to:** `src/ui/UIManager.js`
+  - **Description:** Shows appropriate prompts based on detected input method (keyboard, touch, etc.)
+
+### Performance Profiling
+- **Rule:** Create device-specific performance profiles with targeted optimizations
+  - **Applies to:** `src/utils/DeviceProfiles.js`
+  - **Description:** Tailors rendering approach based on device class (mobile, desktop, high-end)
+
+## 8. Code Standards
+
+### Naming Conventions
+- **Rule:** Follow consistent naming patterns:
+  - **Classes:** PascalCase
+  - **Methods/Properties:** camelCase
+  - **Constants:** UPPER_SNAKE_CASE
+  - **Private Properties:** _prefixWithUnderscore
+  - **Applies to:** All source code
+  - **Description:** Enhances readability and communicates intent through naming
+
+### Documentation
+- **Rule:** Document all classes, methods, and complex algorithms with JSDoc comments
+  - **Applies to:** All source code
+  - **Description:** Enables automated documentation generation and improves code maintainability
+
+### Testing
+- **Rule:** Create unit tests for core systems and critical functionality
+  - **Applies to:** `tests/`
+  - **Description:** Ensures stability when refactoring and identifies regressions early
