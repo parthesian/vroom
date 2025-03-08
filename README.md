@@ -1,55 +1,141 @@
-# Neon Car Trails
+# Weather Wanderer
 
-A Three.js game where you control a car using WASD keys, leaving colorful neon trails that slowly fade away as you drive on a black ground.
+A 3D elemental transformation game built with Three.js where players harness the power of weather elements to traverse and interact with the environment.
 
-## Features
+## Game Overview
 
-- Drive a 3D car using WASD controls
-- Colorful neon trails that follow the car's path
-- Trails slowly fade away over time
-- Black ground with subtle grid for visual reference
-- Dynamic camera that follows the car
+Weather Wanderer is an immersive 3D game where players control a character that can transform into different weather elements. Each transformation grants unique abilities and ways to interact with the environment.
 
-## Controls
+### Core Mechanics
 
-- **W**: Accelerate forward
-- **S**: Brake/Reverse
-- **A**: Turn left
-- **D**: Turn right
+#### Player Transformations
+- **Rain Form**: Ability to flow through narrow passages and interact with plant life
+- **Wind Form**: Enhanced movement speed and ability to reach high places
+- **Lightning Form**: Quick dash movements and ability to power mechanisms
+- **Snow Form**: Create temporary platforms and slow down enemies
 
-## Installation
+#### Environment Interaction
+- Dynamic weather system affecting gameplay
+- Element-specific environmental puzzles
+- Reactive terrain that responds to player's current form
 
-1. Clone this repository
-2. Install dependencies:
-   ```
-   npm install
-   ```
-3. Run the development server:
-   ```
-   npm run dev
-   ```
-4. Open your browser and navigate to the local server address (usually http://localhost:5173)
+### Technical Architecture
 
-## Technologies Used
+Following Three.js best practices, the game is structured into the following core systems:
 
-- Three.js - 3D graphics library
-- Vite - Build tool and development server
+#### Core Systems
+- `SceneManager`: Handles scene transitions and state management
+- `AssetManager`: Centralizes asset loading and caching
+- `InputManager`: Processes player input across different forms
+- `PhysicsSystem`: Manages collision detection and response
+- `RenderManager`: Handles efficient rendering with post-processing effects
 
-## Project Structure
+#### Component Architecture
+- Entity-Component System for flexible object behaviors
+- Modular transformation system for player forms
+- Event-driven interaction system
 
-The project follows a modular architecture with clear separation of concerns:
+### Development Setup
 
-- `src/core/` - Core game engine components
-- `src/entities/` - Game objects like the car and ground
-- `src/effects/` - Visual effects like the trail system
-- `src/input/` - Input handling for keyboard controls
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/weather-wanderer.git
+cd weather-wanderer
+```
 
-## Performance Considerations
+2. Install dependencies
+```bash
+npm install
+```
 
-- Trail segments are automatically removed when they fade completely
-- Maximum number of trail segments is capped to prevent memory issues
-- Efficient update loop with delta time for consistent performance
+3. Run development server
+```bash
+npm run dev
+```
 
-## License
+### Project Structure
 
-MIT 
+```
+weather-wanderer/
+├── src/
+│   ├── core/
+│   │   ├── Engine.js
+│   │   ├── SceneManager.js
+│   │   ├── InputManager.js
+│   │   └── AssetManager.js
+│   ├── entities/
+│   │   ├── Player.js
+│   │   └── Environment.js
+│   ├── components/
+│   │   ├── Transform.js
+│   │   ├── Physics.js
+│   │   └── ElementalPowers.js
+│   ├── shaders/
+│   │   ├── weather/
+│   │   └── effects/
+│   └── levels/
+│       ├── TestLevel.js
+│       └── LevelManager.js
+├── assets/
+│   ├── models/
+│   ├── textures/
+│   └── sounds/
+└── public/
+    └── index.html
+```
+
+### Performance Optimization
+
+- Level of Detail (LOD) system for complex models
+- Efficient particle systems for weather effects
+- Shader-based transformations for elemental forms
+- Spatial partitioning for collision detection
+- Instance rendering for repeated elements
+
+### Controls
+
+- **WASD**: Basic movement
+- **Space**: Jump
+- **1-4**: Element transformation selection
+- **E**: Interact with environment
+- **Shift**: Special ability (varies by form)
+
+### Development Roadmap
+
+#### Phase 1: Core Mechanics
+- [x] Basic player movement and camera system
+- [x] Flat terrain with physics
+- [ ] Basic transformation system
+- [ ] Element-specific abilities
+
+#### Phase 2: Environment
+- [ ] Dynamic weather system
+- [ ] Interactive objects
+- [ ] Environmental hazards
+- [ ] Basic level design
+
+#### Phase 3: Polish
+- [ ] Visual effects for transformations
+- [ ] Weather particle systems
+- [ ] Sound design
+- [ ] UI/UX improvements
+
+### Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+### Credits
+
+Built with:
+- Three.js - 3D Graphics Library
+- Ammo.js - Physics Engine
+- GSAP - Animation Library
+- Howler.js - Audio Library
