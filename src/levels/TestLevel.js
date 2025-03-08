@@ -41,10 +41,10 @@ export class TestLevel {
         const groundMaterial = this.engine.assetManager.getMaterial('ground') || 
                              this.engine.assetManager.getMaterial('default');
         
-        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-        ground.rotation.x = -Math.PI / 2;
-        ground.receiveShadow = true;
-        this.scene.add(ground);
+        this.ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        this.ground.rotation.x = -Math.PI / 2;
+        this.ground.receiveShadow = true;
+        this.scene.add(this.ground);
 
         // Add grid helper to visualize tiles
         const gridHelper = new THREE.GridHelper(100, 50, 0x000000, 0x000000);
@@ -60,15 +60,42 @@ export class TestLevel {
     }
 
     update(deltaTime) {
-        if (this.player) {
-            this.player.update(deltaTime);
-            
-            // Update camera to follow player with new horizontal perspective
-            const playerPos = this.player.mesh.position;
-            const cameraOffset = new THREE.Vector3(0, 8, 20); // Matching our initial camera offset
-            this.camera.position.copy(playerPos).add(cameraOffset);
-            this.camera.lookAt(playerPos.x, playerPos.y + 2, playerPos.z); // Looking slightly above player
+        if (!this.isInitialized) return;
+
+        // Update player
+        this.player.update(deltaTime);
+
+        // Update grass animation - only if the uniforms exist
+        if (this.ground && this.ground.material.uniforms && 
+            this.ground.material.uniforms.time && 
+            this.ground.material.uniforms.playerPosition) {
+            this.ground.material.uniforms.time.value += deltaTime;
+            this.ground.material.uniforms.playerPosition.value.copy(this.player.mesh.position);
         }
+
+        // Update camera to follow player
+        const idealOffset = new THREE.Vector3(0, 8, 20);
+        const idealLookat = new THREE.Vector3(0, 2, 0);
+        
+        // Transform ideal camera position relative to player position
+        const offset = idealOffset.clone();
+        offset.applyQuaternion(this.player.mesh.quaternion);
+        offset.add(this.player.mesh.position);
+        
+        // Transform ideal lookat position relative to player position
+        const lookat = idealLookat.clone();
+        lookat.applyQuaternion(this.player.mesh.quaternion);
+        lookat.add(this.player.mesh.position);
+        
+        // Smoothly move camera
+        this.camera.position.lerp(offset, 0.1);
+        
+        // Make camera look at player
+        const currentLookat = new THREE.Vector3();
+        this.camera.getWorldDirection(currentLookat);
+        const targetLookat = lookat.clone().sub(this.camera.position).normalize();
+        const lerpedLookat = currentLookat.lerp(targetLookat, 0.1);
+        this.camera.lookAt(this.camera.position.clone().add(lerpedLookat));
     }
 
     onWindowResize(width, height) {
